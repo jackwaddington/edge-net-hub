@@ -1,6 +1,17 @@
-# edge-net-hub
+# Edge-NET-hub
 
 The network centre of [Edge-NET](https://github.com/jackwaddington/edge-net). A Raspberry Pi 4 (1GB) running [OpenBSD](https://www.openbsd.org/), acting as a WiFi access point, DHCP server, and MQTT broker for all nodes on the network.
+
+I've been running OpenBSD for a couple of years. It uses `doas` instead of `sudo` — otherwise very familiar if you know Linux. What's striking is how much you can do in a single line of config: things that would take many checkboxes and dropdowns in a GUI router interface are expressed plainly in text files, one per concern.
+
+| File | Purpose |
+| ---- | ------- |
+| `/etc/hostname.em0` | Ethernet interface — uplink to home network |
+| `/etc/hostname.athn0` | WiFi interface — the access point nodes connect to |
+| `/etc/pf.conf` | Packet filter — all firewall and routing rules |
+| `/etc/dhcpd.conf` | DHCP server — assigns fixed IPs to nodes by MAC |
+| `/etc/hostapd.conf` | WiFi AP config — SSID, password, channel |
+| `/etc/rc.conf.local` | Services to start at boot |
 
 ## Hardware
 
