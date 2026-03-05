@@ -3,12 +3,12 @@
 ## Contents
 
 - [Introduction](#introduction)
-- [References](#references)
-- [Hardware](#hardware)
 - [What it does](#what-it-does)
+- [Hardware](#hardware)
 - [Network plan](#network-plan)
 - [pf / firewall](#pf--firewall)
 - [MQTT](#mqtt)
+- [References](#references)
 - [Part of Edge-NET](#part-of-edge-net)
 
 ---
@@ -28,21 +28,6 @@ I've been running OpenBSD for a couple of years. It uses `doas` instead of `sudo
 | `/etc/hostapd.conf` | WiFi AP config — SSID, password, channel |
 | `/etc/rc.conf.local` | Services to start at boot |
 
-## References
-
-- [OpenBSD PF — Firewall example](https://www.openbsd.org/faq/pf/example1.html)
-- [OpenBSD Handbook — Simple router](https://www.openbsdhandbook.com/howto/simple_router)
-- [Book of PF](https://nostarch.com/pf3)
-- [Absolute OpenBSD](https://nostarch.com/obenbsd2e)
-
----
-
-## Hardware
-
-- [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/specifications/) (1GB RAM)
-- Ethernet uplink to home network (optional — network works without it)
-- WiFi used as access point for nodes to connect to
-
 ## What it does
 
 | Service | Role |
@@ -51,6 +36,12 @@ I've been running OpenBSD for a couple of years. It uses `doas` instead of `sudo
 | hostapd | WiFi access point — nodes connect here |
 | dhcpd | Assigns IP addresses to nodes |
 | Mosquitto | MQTT broker — the message bus for all nodes |
+
+## Hardware
+
+- [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/specifications/) (1GB RAM)
+- Ethernet uplink to home network (optional — network works without it)
+- WiFi used as access point for nodes to connect to
 
 ## Network plan
 
@@ -102,6 +93,13 @@ When the ethernet uplink is disconnected, the network operates in standalone mod
 ## MQTT
 
 Mosquitto runs as a broker. All nodes connect to it on the standard MQTT port (1883). Nodes publish and subscribe to topics — no direct node-to-node connections are needed.
+
+## References
+
+- [OpenBSD PF — Firewall example](https://www.openbsd.org/faq/pf/example1.html)
+- [OpenBSD Handbook — Simple router](https://www.openbsdhandbook.com/howto/simple_router)
+- [Book of PF](https://nostarch.com/pf3)
+- [Absolute OpenBSD](https://nostarch.com/obenbsd2e)
 
 ## Part of Edge-NET
 

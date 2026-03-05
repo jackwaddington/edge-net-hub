@@ -1,0 +1,8 @@
+# Edge-NET WiFi access point config
+# Password injected from .env by Makefile — do not put real password here
+
+network {
+    interface athn0
+    ssid "${WIFI_SSID}"
+    wpakey "${WIFI_PASSWORD}"
+}
