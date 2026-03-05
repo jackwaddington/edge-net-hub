@@ -1,5 +1,20 @@
 # Edge-NET-hub
 
+## Contents
+
+- [Introduction](#introduction)
+- [References](#references)
+- [Hardware](#hardware)
+- [What it does](#what-it-does)
+- [Network plan](#network-plan)
+- [pf / firewall](#pf--firewall)
+- [MQTT](#mqtt)
+- [Part of Edge-NET](#part-of-edge-net)
+
+---
+
+## Introduction
+
 The network centre of [Edge-NET](https://github.com/jackwaddington/edge-net). A Raspberry Pi 4 (1GB) running [OpenBSD](https://www.openbsd.org/), acting as a WiFi access point, DHCP server, and MQTT broker for all nodes on the network.
 
 I've been running OpenBSD for a couple of years. It uses `doas` instead of `sudo` — otherwise very familiar if you know Linux. What's striking is how much you can do in a single line of config: things that would take many checkboxes and dropdowns in a GUI router interface are expressed plainly in text files, one per concern.
@@ -12,6 +27,15 @@ I've been running OpenBSD for a couple of years. It uses `doas` instead of `sudo
 | `/etc/dhcpd.conf` | DHCP server — assigns fixed IPs to nodes by MAC |
 | `/etc/hostapd.conf` | WiFi AP config — SSID, password, channel |
 | `/etc/rc.conf.local` | Services to start at boot |
+
+## References
+
+- [OpenBSD PF — Firewall example](https://www.openbsd.org/faq/pf/example1.html)
+- [OpenBSD Handbook — Simple router](https://www.openbsdhandbook.com/howto/simple_router)
+- [Book of PF](https://nostarch.com/pf3)
+- [Absolute OpenBSD](https://nostarch.com/obenbsd2e)
+
+---
 
 ## Hardware
 
@@ -64,10 +88,10 @@ Linux SBCs get `.10`–`.19`, microcontrollers get `.20`–`.29`. Microcontrolle
 | any | `10.1.1.1:1883` | TCP | pass | All nodes reach MQTT broker |
 | `10.1.1.10–19` | `10.1.1.0/24` | any | pass | Linux Pis can SSH to each other |
 | `10.1.1.20–29` | `10.1.1.1:1883` | TCP | pass | Microcontrollers: MQTT only |
-| `10.1.1.20` (gfx) | `<k3s-node>:<port>` | TCP | pass | GFX → Prometheus/Grafana on home network |
+| `10.1.1.20` (gfx) | `192.168.0.216:{3000,9090}` | TCP | pass | GFX → Grafana/Prometheus on k3s master |
 | any | any (internet) | any | block | No internet access |
 
-> `<k3s-node>:<port>` — to be filled once the home network subnet and k3s node IP are confirmed.
+> k3s master is `192.168.0.216`. Grafana on port 3000, Prometheus on port 9090 — must be exposed via NodePort on the master's home network interface.
 
 ## pf / firewall
 
@@ -78,13 +102,6 @@ When the ethernet uplink is disconnected, the network operates in standalone mod
 ## MQTT
 
 Mosquitto runs as a broker. All nodes connect to it on the standard MQTT port (1883). Nodes publish and subscribe to topics — no direct node-to-node connections are needed.
-
-## References
-
-- [OpenBSD PF — Firewall example](https://www.openbsd.org/faq/pf/example1.html)
-- [OpenBSD Handbook — Simple router](https://www.openbsdhandbook.com/howto/simple_router)
-- [Book of PF](https://nostarch.com/pf3)
-- [Absolute OpenBSD](https://nostarch.com/obenbsd2e)
 
 ## Part of Edge-NET
 
