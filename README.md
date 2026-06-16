@@ -21,19 +21,19 @@ I've been running OpenBSD for a couple of years. It uses `doas` instead of `sudo
 
 | File | Purpose |
 | ---- | ------- |
-| `/etc/hostname.em0` | Ethernet interface — uplink to home network |
-| `/etc/hostname.athn0` | WiFi interface — the access point nodes connect to |
+| `/etc/hostname.bse0` | Ethernet interface — uplink to home network (DHCP) |
+| `/etc/hostname.bwfm0` | WiFi interface — AP config, SSID and password set here |
 | `/etc/pf.conf` | Packet filter — all firewall and routing rules |
 | `/etc/dhcpd.conf` | DHCP server — assigns fixed IPs to nodes by MAC |
-| `/etc/hostapd.conf` | WiFi AP config — SSID, password, channel |
 | `/etc/rc.conf.local` | Services to start at boot |
+| `/etc/mosquitto/mosquitto.conf` | MQTT broker — listeners (WiFi + loopback) and access |
 
 ## What it does
 
 | Service | Role |
 | ------- | ---- |
 | pf (packet filter) | Firewall and traffic control between nodes |
-| hostapd | WiFi access point — nodes connect here |
+| bwfm0 (hostap) | WiFi access point — nodes connect here |
 | dhcpd | Assigns IP addresses to nodes |
 | Mosquitto | MQTT broker — the message bus for all nodes |
 
@@ -51,8 +51,8 @@ Using `10.1.x.x` (RFC 1918). Each physical network gets its own /24 — only the
 
 | Network | Subnet | Interface | Notes |
 | ------- | ------ | --------- | ----- |
-| WiFi AP (Edge-NET) | `10.1.1.0/24` | `athn0` (or similar) | All nodes connect here |
-| Ethernet uplink | DHCP from home router | `em0` | Optional — standalone works without it |
+| WiFi AP (Edge-NET) | `10.1.1.0/24` | `bwfm0` | All nodes connect here |
+| Ethernet uplink | DHCP from home router | `bse0` | Optional — standalone works without it |
 | Reserved | `10.1.2.0/24` | — | Future ethernet interface |
 | Reserved | `10.1.3.0/24` | — | Future use |
 
