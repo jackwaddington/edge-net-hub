@@ -1,3 +1,2 @@
-dhcpd_flags="athn0"
-hostapd_flags="/etc/hostapd.conf"
+dhcpd_flags="bwfm0"
 mosquitto_flags=""
