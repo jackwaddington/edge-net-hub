@@ -1,5 +1,6 @@
 inet 10.1.1.1 255.255.255.0
 media autoselect mediaopt hostap
+chan 11
 nwid ${WIFI_SSID}
 wpakey ${WIFI_PASSWORD}
 up
