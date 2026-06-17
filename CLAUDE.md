@@ -77,6 +77,16 @@ Then verify from hub: `ssh edge@10.1.1.x`
 
 AP runs on `bwfm0`. SSID and password set in `/etc/hostname.bwfm0`, templated from `.env`. To change credentials, update `.env`, re-run `make deploy` (or manually sed the file on hub), then `doas sh /etc/netstart bwfm0`. WPA2 password must be 8–63 characters.
 
+### Link tuning (learned the hard way)
+
+- **Channel:** `/etc/hostname.bwfm0` pins `chan 11`. Without it the AP defaults to **channel 1** (most congested 2.4GHz channel) → a Pi Zero saw up to **75% packet loss**. Channel 11 → 0%. If a node is flaky, suspect the AP channel before the node. hostap mode can't scan for neighbours, so pick 1/6/11 empirically and measure `ping` loss. (BSD `sed` rejects GNU `a text`; `ex` needs a TERM — use `ed` to edit files non-interactively.)
+- **Power-save (per node, by power source):** mains nodes turn WiFi power-save **off** — the Pi Zero's radio naps caused **0% loss but 1.2s latency spikes**; off → steady 5ms. Persist on the node with a NetworkManager drop-in:
+  ```
+  printf '[connection]\nwifi.powersave = 2\n' | sudo tee /etc/NetworkManager/conf.d/wifi-powersave-off.conf
+  sudo systemctl restart NetworkManager
+  ```
+  Do this on **every Pi Zero / Zero 2** node (mains-powered). A future **battery** node wants the opposite (leave power-save on, deep-sleep). `iw` lives in `/usr/sbin`, not in the `edge` user's non-login PATH — use `/usr/sbin/iw dev wlan0 get power_save` as `edge`.
+
 ## MQTT
 
 Broker on hub at `10.1.1.1:1883`. No auth currently — all nodes on the WiFi subnet can publish/subscribe.
