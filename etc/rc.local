@@ -1,0 +1,2 @@
+# reload Edge-NET pf rules once interfaces (bwfm0) are up
+/sbin/pfctl -f /etc/pf.conf
